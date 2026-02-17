@@ -1,0 +1,125 @@
+Problem Name: Recyclable and Low Fat Products
+Problem Link: https://leetcode.com/problems/recyclable-and-low-fat-products/?envType=study-plan-v2
+SQL Solution: SELECT product_id FROM Products WHERE low_fats = 'Y' AND recyclable = 'Y' ;
+
+
+Problem Name: Find Customer Referee
+Problem Link: https://leetcode.com/problems/find-customer-referee/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: SELECT name  FROM Customer WHERE referee_id != 2 OR referee_id  is null;
+
+
+Problem Name: Replace Employee ID With The Unique Identifier
+Problem Link: https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: SELECT eu.unique_id ,e.name FROM Employees as e LEFT JOIN EmployeeUNI as eu ON e.id = eu.id;
+
+Problem Name: Product Sales Analysis I
+Problem Link: https://leetcode.com/problems/product-sales-analysis-i/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: SELECT p.product_name ,s.year ,s.price FROM Sales  as s JOIN Product  as p ON s.product_id  = p.product_id ;
+
+
+Problem Name: Not Boring Movies
+Problem Link: https://leetcode.com/problems/not-boring-movies/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: select * from Cinema where id%2 = 1 and description != 'boring' order by rating desc;
+
+
+Problem Name: Average Selling Price
+Problem Link: https://leetcode.com/problems/average-selling-price/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT p.product_id, 
+IFNULL(ROUND(SUM(p.price * u.units)/ SUM(u.units),2),0) AS average_price
+FROM Prices as p
+LEFT JOIN UnitsSold as u 
+ON  p.product_id = u.product_id
+AND purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY product_id
+;
+
+
+Problem Name: Number of Unique Subjects Taught by Each Teacher
+Problem Link: https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT teacher_id ,COUNT(DISTINCT subject_id) AS cnt
+FROM Teacher
+GROUP BY teacher_id ;
+
+
+Problem Name: 1141. User Activity for the Past 30 Days I
+Problem Link: https://leetcode.com/problems/user-activity-for-the-past-30-days-i/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT activity_date AS day,
+COUNT(DISTINCT user_id) AS active_users
+FROM Activity 
+WHERE activity_date BETWEEN date_sub('2019-07-27', INTERVAL 29 day) AND '2019-07-27'
+GROUP BY day ;
+
+
+Problem Name: The Number of Employees Which Report to Each Employee
+Problem Link: https://leetcode.com/problems/the-number-of-employees-which-report-to-each-employee/submissions/1921984239/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT m.employee_id, m.name,COUNT(e.employee_id) AS reports_count,
+ROUND(AVG(e.age)) AS average_age
+FROM Employees m
+JOIN Employees e
+ON m.employee_id = e.reports_to
+GROUP BY m.employee_id, m.name
+ORDER BY m.employee_id;
+
+
+Problem Name: Primary Department for Each Employee
+Problem Link: https://leetcode.com/problems/primary-department-for-each-employee/description/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT employee_id,department_id
+FROM Employee
+WHERE primary_flag = 'Y'
+UNION
+SELECT employee_id,department_id
+FROM Employee
+GROUP BY employee_id
+HAVING COUNT(*) = 1;
+
+
+Problem Name: Employees Whose Manager Left the Company
+Problem Link: https://leetcode.com/problems/employees-whose-manager-left-the-company/description/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT e.employee_id
+FROM Employees e
+LEFT JOIN Employees m
+ON e.manager_id = m.employee_id
+WHERE e.manager_id IS NOT NULL
+AND m.employee_id IS NULL
+ORDER BY e.employee_id;
+
+
+Problem Name: Exchange Seats
+Problem Link: https://leetcode.com/problems/exchange-seats/description/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT
+    CASE
+        WHEN id % 2 = 1 AND id < (SELECT MAX(id) FROM Seat)
+            THEN id + 1
+        WHEN id % 2 = 0
+            THEN id - 1
+        ELSE id
+    END AS id,
+    student
+FROM Seat
+ORDER BY id;
+
+
+Problem Name: Fix Names in a Table
+Problem Link: https://leetcode.com/problems/fix-names-in-a-table/description/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT user_id,CONCAT(
+        UPPER(LEFT(name, 1)),
+        LOWER(SUBSTRING(name, 2))
+    ) 
+AS name
+FROM Users
+ORDER BY user_id;
+
+Problem Name: Patients With a Condition
+Problem Link: https://leetcode.com/problems/patients-with-a-condition/description/?envType=study-plan-v2&envId=top-sql-50
+SQL Solution: 
+SELECT patient_id,patient_name,conditions 
+FROM Patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';
